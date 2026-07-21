@@ -6,6 +6,7 @@ import type {
   Message,
   MessageList,
   SendMessageOptions,
+  SendMessageResult,
 } from './types';
 
 const PASS_THROUGH = ['templateParams'];
@@ -14,7 +15,7 @@ export class Messages {
   constructor(private readonly client: HttpClient) {}
 
   send(options: SendMessageOptions) {
-    return this.client.request<Message>('POST', '/messages', { body: options, passThrough: PASS_THROUGH });
+    return this.client.request<SendMessageResult>('POST', '/messages', { body: options, passThrough: PASS_THROUGH });
   }
 
   sendBulk(options: BulkMessageOptions) {

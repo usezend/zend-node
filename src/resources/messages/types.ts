@@ -1,6 +1,12 @@
 export type Channel = 'sms' | 'whatsapp';
 export type MessageStatus =
-  | 'pending' | 'queued' | 'processing' | 'sent' | 'delivered' | 'failed' | 'cancelled';
+  | 'pending'
+  | 'queued'
+  | 'processing'
+  | 'sent'
+  | 'delivered'
+  | 'failed'
+  | 'cancelled';
 
 export interface SendMessageOptions {
   to: string;
@@ -33,23 +39,45 @@ export interface BulkMessageOptions {
   senderId?: string;
 }
 
-export interface Message {
+/** Acknowledgement returned by `send()` when a message is queued. */
+export interface SendMessageResult {
   id: string;
   status: MessageStatus;
   estimatedCost?: number;
   message?: string;
+}
+
+export interface DeliveryAttempt {
+  channel: Channel;
+  status: string;
+  attemptedAt?: string;
+  cost?: number;
+  errorMessage?: string;
+}
+
+/** Full message record returned by `get()` and within `list()`. */
+export interface Message {
+  id: string;
+  status: MessageStatus;
+  channelUsed?: Channel;
   to?: string;
-  channel?: Channel;
+  body?: string;
+  totalCost?: number;
+  deliveryAttempts?: DeliveryAttempt[];
   createdAt?: string;
+  sentAt?: string;
+  errorMessage?: string;
 }
 
 export interface MessageList {
   messages: Message[];
   total: number;
+  page?: number;
+  pages?: number;
 }
 
 export interface BulkMessageResult {
   total?: number;
   queued?: number;
-  messages?: Message[];
+  messages?: SendMessageResult[];
 }

@@ -1,16 +1,22 @@
 import type { HttpClient } from '../../client/http-client';
 import type { ListParams } from '../../common/types';
-import type { SendVoiceOptions, VoiceBatch, VoiceBatchList, VoiceUpload } from './types';
+import type {
+  SendVoiceOptions,
+  VoiceBatchDetail,
+  VoiceBatchList,
+  VoiceSendResult,
+  VoiceUpload,
+} from './types';
 
 export class Voice {
   constructor(private readonly client: HttpClient) {}
 
   send(options: SendVoiceOptions) {
-    return this.client.request<VoiceBatch>('POST', '/voice/send', { body: options });
+    return this.client.request<VoiceSendResult>('POST', '/voice/send', { body: options });
   }
 
   get(batchId: string) {
-    return this.client.request<VoiceBatch>('GET', `/voice/${batchId}`);
+    return this.client.request<VoiceBatchDetail>('GET', `/voice/${batchId}`);
   }
 
   list(params?: ListParams) {
