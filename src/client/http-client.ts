@@ -29,7 +29,7 @@ export class HttpClient {
       ...this.config.headers,
     };
 
-    let body: BodyInit | undefined;
+    let body: string | FormData | undefined;
     if (options.multipart) {
       body = options.multipart;
     } else if (options.body !== undefined) {
