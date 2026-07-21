@@ -28,51 +28,51 @@ The API key can also be supplied via the `ZEND_API_KEY` environment variable, in
 const zend = new Zend();
 ```
 
-You can override the base URL (e.g. for a staging environment) either via the `ZEND_BASE_URL` environment variable or the `baseUrl` option:
+You can override the base URL (e.g. for a staging environment) or the request timeout, in milliseconds, via options — or the `ZEND_BASE_URL` environment variable:
 
 ```ts
 const zend = new Zend('sent_live_...', {
   baseUrl: 'https://staging.api.tryzend.com',
-  timeout: 30_000, // ms, defaults to 30s
+  timeout: 30_000,
 });
 ```
 
-> **Note:** `baseUrl` defaults to `https://api.tryzend.com`. To target another environment, pass `baseUrl` explicitly or set the `ZEND_BASE_URL` environment variable.
+> **Note:** `baseUrl` defaults to `https://api.tryzend.com`, and `timeout` defaults to 30s.
 
 Every method returns a promise that resolves to `{ data, error }` — see [Errors](#errors) below.
 
 ## Send SMS / WhatsApp
 
-Send a plain-text SMS. Every option is shown below — keep only the ones you need:
+Send a plain-text SMS:
 
 ```ts
 const sms = await zend.messages.send({
-  to: '+233201234567',            // required — recipient in E.164 format
-  body: 'Hello from Zend!',       // message text (omit when using a template)
-  preferredChannels: ['sms'],     // 'sms' and/or 'whatsapp' — order sets the fallback order
-  senderId: 'MyBrand',            // optional — your approved SMS sender ID
-  fallbackEnabled: true,          // optional — try the next channel if one fails
-  priority: 'high',               // optional — 'low' | 'normal' | 'high' | 'urgent'
-  deliveryPriority: 'speed',      // optional — 'cost' | 'speed' | 'reliability'
-  webhookUrl: 'https://your-app.com/webhooks/zend', // optional — delivery-status callback
-  // scheduledFor: '2026-08-01T09:00:00Z',          // optional — ISO 8601, send later
+  to: '+233201234567',
+  body: 'Hello from Zend!',
+  preferredChannels: ['sms'],
+  senderId: 'MyBrand',
+  fallbackEnabled: true,
+  priority: 'high',
+  deliveryPriority: 'speed',
+  webhookUrl: 'https://your-app.com/webhooks/zend',
 });
+
 if (sms.error) throw sms.error;
 console.log(`Message ${sms.data.id} (${sms.data.status})`);
 ```
 
-Send over WhatsApp with a template (and optional media), falling back to SMS:
+Send over WhatsApp with a template and optional media, falling back to SMS:
 
 ```ts
 await zend.messages.send({
   to: '+233201234567',
-  templateId: 'welcome',                          // WhatsApp business template ID
-  templateParams: { first_name: 'John' },         // fills the template's variables
-  preferredChannels: ['whatsapp', 'sms'],         // WhatsApp first, SMS fallback
+  templateId: 'welcome',
+  templateParams: { first_name: 'John' },
+  preferredChannels: ['whatsapp', 'sms'],
   fallbackEnabled: true,
-  senderId: 'MyBrand',                            // optional — used for the SMS fallback
-  mediaUrl: 'https://cdn.example.com/promo.jpg',  // optional — media attachment
-  mediaType: 'image',                             // 'image' | 'document' | 'audio' | 'video'
+  senderId: 'MyBrand',
+  mediaUrl: 'https://cdn.example.com/promo.jpg',
+  mediaType: 'image',
 });
 ```
 
@@ -84,10 +84,10 @@ await zend.messages.sendBulk({
     { to: '+233201234567', body: 'Hi Ama!' },
     { to: '+233207654321', body: 'Your code is 123456', templateParams: { code: '123456' } },
   ],
-  preferredChannels: ['sms'],   // applied to every message
-  senderId: 'MyBrand',          // optional
-  fallbackEnabled: true,        // optional
-  webhookUrl: 'https://your-app.com/webhooks/zend', // optional — delivery-status callback
+  preferredChannels: ['sms'],
+  senderId: 'MyBrand',
+  fallbackEnabled: true,
+  webhookUrl: 'https://your-app.com/webhooks/zend',
 });
 ```
 
@@ -97,12 +97,13 @@ Other `messages` methods: `get(id)`, `list(params?)`, `cancel(id)`, `retry(id)`.
 
 ```ts
 const email = await zend.emails.send({
-  from: 'you@example.com',    // required — a verified sender address
-  to: 'user@gmail.com',       // required — recipient
-  subject: 'Hello world',     // required
-  html: '<p>It works!</p>',   // HTML body
-  text: 'It works!',          // optional — plain-text fallback
+  from: 'you@example.com',
+  to: 'user@gmail.com',
+  subject: 'Hello world',
+  html: '<p>It works!</p>',
+  text: 'It works!',
 });
+
 if (email.error) throw email.error;
 console.log(`Email ${email.data.id} sent`);
 ```
@@ -111,22 +112,26 @@ Other `emails` methods: `get(id)`, `list(params?)`.
 
 ## Send Voice
 
+Send a call using text-to-speech, falling back to SMS if it isn't answered:
+
 ```ts
-// Text-to-speech
 await zend.voice.send({
-  recipients: ['+233201234567'],          // required — one or more numbers
-  text: 'Your order has shipped.',        // TTS message (omit when using voiceUrl)
-  voice: 'female',                        // optional — 'female' | 'male'
-  retry: true,                            // optional — retry calls that aren't answered
-  callbackUrl: 'https://your-app.com/webhooks/voice', // optional — status callback
-  fallback: {                             // optional — send an SMS if the call isn't answered
+  recipients: ['+233201234567'],
+  text: 'Your order has shipped.',
+  voice: 'female',
+  retry: true,
+  callbackUrl: 'https://your-app.com/webhooks/voice',
+  fallback: {
     sms: true,
     smsText: 'Your order has shipped.',
     senderId: 'MyBrand',
   },
 });
+```
 
-// ...or play a pre-recorded audio file (hosted MP3/WAV)
+Or play a pre-recorded audio file (a hosted MP3/WAV):
+
+```ts
 await zend.voice.send({
   recipients: ['+233201234567'],
   voiceUrl: 'https://cdn.example.com/message.mp3',
@@ -134,7 +139,7 @@ await zend.voice.send({
 });
 ```
 
-To send a **local** audio file, upload it first with `zend.voice.upload(file, filename)` and pass the returned `url` as `voiceUrl`.
+To send a local audio file, upload it first with `zend.voice.upload(file, filename)` and pass the returned `url` as `voiceUrl`.
 
 Other `voice` methods: `get(batchId)`, `list(params?)`, `upload(file, filename)`.
 
@@ -144,11 +149,12 @@ Templates are read-only from this SDK — list and fetch templates managed elsew
 
 ```ts
 const templates = await zend.templates.list({
-  category: 'transactional',  // optional filter
-  status: 'active',           // optional filter
-  limit: 20,                  // optional — page size
-  offset: 0,                  // optional — page offset
+  category: 'transactional',
+  status: 'active',
+  limit: 20,
+  offset: 0,
 });
+
 console.log(`You have ${templates.data?.total ?? 0} templates`);
 ```
 
@@ -171,9 +177,11 @@ Check `error` before using `data`:
 
 ```ts
 const sms = await zend.messages.send({ to: '+233201234567', body: 'Hello!' });
+
 if (sms.error) {
-  throw sms.error; // ZendError
+  throw sms.error;
 }
+
 console.log(sms.data.id);
 ```
 
