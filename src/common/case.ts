@@ -1,8 +1,11 @@
 const snakeKey = (k: string): string => k.replace(/[A-Z]/g, (m) => `_${m.toLowerCase()}`);
 const camelKey = (k: string): string => k.replace(/_([a-z0-9])/g, (_, c: string) => c.toUpperCase());
 
-const isPlainObject = (v: unknown): v is Record<string, unknown> =>
-  typeof v === 'object' && v !== null && !Array.isArray(v);
+const isPlainObject = (v: unknown): v is Record<string, unknown> => {
+  if (typeof v !== 'object' || v === null || Array.isArray(v)) return false;
+  const proto = Object.getPrototypeOf(v);
+  return proto === Object.prototype || proto === null;
+};
 
 export function toSnakeCase(value: unknown, passThrough: string[] = []): unknown {
   if (Array.isArray(value)) return value.map((v) => toSnakeCase(v, passThrough));
