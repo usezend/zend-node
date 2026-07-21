@@ -40,5 +40,4 @@ export interface ListTemplatesParams {
   status?: string;
   limit?: number;
   offset?: number;
-  [key: string]: string | number | boolean | undefined;
 }

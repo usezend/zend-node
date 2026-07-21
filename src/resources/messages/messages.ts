@@ -29,7 +29,7 @@ export class Messages {
   }
 
   list(params?: ListParams) {
-    return this.client.request<MessageList>('GET', '/messages', { query: params });
+    return this.client.request<MessageList>('GET', '/messages', { query: params ? { ...params } : undefined });
   }
 
   cancel(id: string) {

@@ -14,7 +14,7 @@ export class Voice {
   }
 
   list(params?: ListParams) {
-    return this.client.request<VoiceBatchList>('GET', '/voice', { query: params });
+    return this.client.request<VoiceBatchList>('GET', '/voice', { query: params ? { ...params } : undefined });
   }
 
   upload(file: Blob, filename: string) {

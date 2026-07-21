@@ -5,7 +5,7 @@ export class Templates {
   constructor(private readonly client: HttpClient) {}
 
   list(params?: ListTemplatesParams) {
-    return this.client.request<TemplateList>('GET', '/templates', { query: params });
+    return this.client.request<TemplateList>('GET', '/templates', { query: params ? { ...params } : undefined });
   }
 
   get(id: string) {

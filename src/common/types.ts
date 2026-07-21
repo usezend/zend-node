@@ -7,5 +7,4 @@ export type ZendResponse<T> =
 export interface ListParams {
   limit?: number;
   offset?: number;
-  [key: string]: string | number | boolean | undefined;
 }

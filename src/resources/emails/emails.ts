@@ -14,6 +14,6 @@ export class Emails {
   }
 
   list(params?: ListParams) {
-    return this.client.request<EmailList>('GET', '/email/messages', { query: params });
+    return this.client.request<EmailList>('GET', '/email/messages', { query: params ? { ...params } : undefined });
   }
 }
