@@ -77,4 +77,14 @@ describe('HttpClient.request', () => {
     expect(res.data).toBeNull();
     expect(res.error?.name).toBe('timeout');
   });
+
+  it('normalizes a raw Mongo document in the response: _id -> id, drops __v', async () => {
+    mockFetch(200, { _id: 'e1', __v: 0, user_id: 'u1', from: 'a', to: 'b', status: 'pending' });
+    const res = await new HttpClient(cfg).request<Record<string, unknown>>('POST', '/email/send');
+    expect(res.error).toBeNull();
+    // _id becomes a clean id, __v is gone (no `Id`/`_V` leakage), rest camelCased.
+    expect(res.data).toEqual({ id: 'e1', userId: 'u1', from: 'a', to: 'b', status: 'pending' });
+    expect((res.data as Record<string, unknown>)._id).toBeUndefined();
+    expect((res.data as Record<string, unknown>).Id).toBeUndefined();
+  });
 });

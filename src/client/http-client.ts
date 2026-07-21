@@ -1,4 +1,5 @@
 import { toCamelCase, toSnakeCase } from '../common/case';
+import { normalizeResponse } from '../common/normalize';
 import { ZendError } from './error';
 import type { ZendResponse } from '../common/types';
 import { VERSION } from '../version';
@@ -62,7 +63,7 @@ export class HttpClient {
         };
       }
 
-      return { data: toCamelCase(json) as T, error: null };
+      return { data: toCamelCase(normalizeResponse(json)) as T, error: null };
     } catch (err) {
       const isAbort = err instanceof Error && err.name === 'AbortError';
       return {
