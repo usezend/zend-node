@@ -61,7 +61,7 @@ if (sms.error) throw sms.error;
 console.log(`Message ${sms.data.id} (${sms.data.status})`);
 ```
 
-Send over WhatsApp with a template and optional media, falling back to SMS:
+Send over WhatsApp with a template, falling back to SMS:
 
 ```ts
 await zend.messages.send({
@@ -71,10 +71,10 @@ await zend.messages.send({
   preferredChannels: ['whatsapp', 'sms'],
   fallbackEnabled: true,
   senderId: 'MyBrand',
-  mediaUrl: 'https://cdn.example.com/promo.jpg',
-  mediaType: 'image',
 });
 ```
+
+> Media (images, documents) on WhatsApp is defined in the approved template itself, not passed at send time.
 
 Send to many recipients in one call:
 

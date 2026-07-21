@@ -18,7 +18,7 @@ async function main() {
   if (sms.error) throw sms.error;
   console.log(`Message ${sms.data.id} (${sms.data.status})`);
 
-  // WhatsApp with a template + media, falling back to SMS
+  // WhatsApp with a template, falling back to SMS
   await zend.messages.send({
     to: '+233201234567',
     templateId: 'welcome',
@@ -26,8 +26,6 @@ async function main() {
     preferredChannels: ['whatsapp', 'sms'],
     fallbackEnabled: true,
     senderId: 'MyBrand',
-    mediaUrl: 'https://cdn.example.com/promo.jpg',
-    mediaType: 'image',
   });
 
   // Bulk send
