@@ -2,6 +2,8 @@
 
 Official Node.js/TypeScript client for the [Zend](https://tryzend.dev) messaging platform. Send SMS, WhatsApp, email, and voice messages — and manage message templates — from a single, typed client.
 
+📚 **[Read the docs →](https://docs.tryzend.com)**
+
 ## Installation
 
 ```bash
@@ -44,7 +46,11 @@ Every method returns a promise that resolves to `{ data, error }` — see [Error
 Send a plain-text SMS:
 
 ```ts
-const sms = await zend.messages.send({ to: '+233201234567', body: 'Hello!', preferredChannels: ['sms'] });
+const sms = await zend.messages.send({
+  to: '+233201234567',
+  body: 'Hello!',
+  preferredChannels: ['sms'],
+});
 if (sms.error) throw sms.error;
 console.log(`Message ${sms.data.id} (${sms.data.status})`);
 ```
@@ -80,12 +86,21 @@ Other `emails` methods: `get(id)`, `list(params?)`.
 ## Send Voice
 
 ```ts
+// Text-to-speech
 await zend.voice.send({
   recipients: ['+233201234567'],
   text: 'Your order has shipped.',
   fallback: { sms: true, smsText: 'Your order has shipped.' },
 });
+
+// A pre-recorded audio file (hosted MP3/WAV)
+await zend.voice.send({
+  recipients: ['+233201234567'],
+  voiceUrl: 'https://cdn.example.com/message.mp3',
+});
 ```
+
+To send a **local** audio file, upload it first with `zend.voice.upload(file, filename)` and pass the returned `url` as `voiceUrl`.
 
 Other `voice` methods: `get(batchId)`, `list(params?)`, `upload(file, filename)`.
 
