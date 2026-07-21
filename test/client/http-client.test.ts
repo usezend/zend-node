@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { HttpClient } from '../../src/client/http-client';
+import { ZendError } from '../../src/client/error';
 
 const cfg = { apiKey: 'sent_live_x', baseUrl: 'https://api.test', timeout: 5000 };
 
@@ -56,5 +57,24 @@ describe('HttpClient.request', () => {
     const fetchFn = mockFetch(200, { messages: [], total: 0 });
     await new HttpClient(cfg).request('GET', '/messages', { query: { limit: 10, status: undefined } });
     expect(fetchFn.mock.calls[0][0]).toBe('https://api.test/messages?limit=10');
+  });
+
+  it('maps a non-JSON error body to a ZendError that keeps the status code', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => new Response('<html>502 Bad Gateway</html>', { status: 502 })));
+    const res = await new HttpClient(cfg).request('GET', '/messages');
+    expect(res.data).toBeNull();
+    expect(res.error?.statusCode).toBe(502);
+    expect(res.error?.name).toBe('api_error');
+  });
+
+  it('maps an aborted/timed-out request to a timeout error', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => {
+      const e = new Error('aborted');
+      e.name = 'AbortError';
+      throw e;
+    }));
+    const res = await new HttpClient(cfg).request('GET', '/messages');
+    expect(res.data).toBeNull();
+    expect(res.error?.name).toBe('timeout');
   });
 });

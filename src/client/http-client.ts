@@ -43,12 +43,19 @@ export class HttpClient {
     try {
       const res = await fetch(url, { method, headers, body, signal: controller.signal });
       const text = await res.text();
-      const json = text ? JSON.parse(text) : null;
+      let json: any = null;
+      if (text) {
+        try {
+          json = JSON.parse(text);
+        } catch {
+          json = null;
+        }
+      }
 
       if (!res.ok) {
         const message = Array.isArray(json?.message)
           ? json.message.join(', ')
-          : json?.message || json?.error || res.statusText || 'Request failed';
+          : json?.message || json?.error || (text || res.statusText) || 'Request failed';
         return {
           data: null,
           error: new ZendError({ message, name: json?.error || 'api_error', statusCode: res.status }),
