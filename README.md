@@ -1,6 +1,6 @@
 # @zend/node
 
-Official Node.js/TypeScript client for the [Zend](https://zend.dev) messaging platform. Send SMS, WhatsApp, email, and voice messages — and manage message templates — from a single, typed client.
+Official Node.js/TypeScript client for the [Zend](https://tryzend.dev) messaging platform. Send SMS, WhatsApp, email, and voice messages — and manage message templates — from a single, typed client.
 
 ## Installation
 
@@ -30,12 +30,12 @@ You can override the base URL (e.g. for a staging environment) either via the `Z
 
 ```ts
 const zend = new Zend('sent_live_...', {
-  baseUrl: 'https://staging.api.zend.dev',
+  baseUrl: 'https://staging.api.tryzend.com',
   timeout: 30_000, // ms, defaults to 30s
 });
 ```
 
-> **Note:** `baseUrl` currently defaults to a placeholder (`https://api.zend.dev`) until the production URL is confirmed. Until then, pass `baseUrl` explicitly or set `ZEND_BASE_URL`.
+> **Note:** `baseUrl` defaults to `https://api.tryzend.com`. To target another environment, pass `baseUrl` explicitly or set the `ZEND_BASE_URL` environment variable.
 
 Every method returns a promise that resolves to `{ data, error }` — see [Errors](#errors) below.
 
