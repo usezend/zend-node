@@ -2,6 +2,26 @@
   "name": "@zend/node",
   "version": "0.1.0",
   "description": "Official Node.js/TypeScript client for the Zend messaging platform",
+  "license": "MIT",
+  "author": "Zend",
+  "homepage": "https://github.com/usezend/zend-node#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/usezend/zend-node.git"
+  },
+  "bugs": {
+    "url": "https://github.com/usezend/zend-node/issues"
+  },
+  "keywords": [
+    "zend",
+    "sms",
+    "whatsapp",
+    "voice",
+    "email",
+    "otp",
+    "messaging",
+    "sdk"
+  ],
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -16,12 +36,16 @@
   "files": ["dist"],
   "sideEffects": false,
   "engines": { "node": ">=18" },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
