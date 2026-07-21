@@ -2,7 +2,7 @@
 
 Official Node.js/TypeScript client for the [Zend](https://tryzend.dev) messaging platform. Send SMS, WhatsApp, email, and voice messages — and manage message templates — from a single, typed client.
 
-📚 **[Read the docs →](https://docs.tryzend.com)**
+📚 **[Read the docs →](https://tryzend.com/docs)**
 
 ## Installation
 
