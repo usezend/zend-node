@@ -15,7 +15,4 @@ export interface Email {
   createdAt?: string;
 }
 
-export interface EmailList {
-  messages: Email[];
-  total: number;
-}
+export type EmailList = Email[];
