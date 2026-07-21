@@ -8,8 +8,6 @@ export interface SendMessageOptions {
   preferredChannels?: Channel[];
   templateId?: string;
   templateParams?: Record<string, unknown>;
-  mediaUrl?: string;
-  mediaType?: 'image' | 'document' | 'audio' | 'video';
   senderId?: string;
   scheduledFor?: string;
   fallbackEnabled?: boolean;
