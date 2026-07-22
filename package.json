@@ -1,5 +1,5 @@
 {
-  "name": "@zend/node",
+  "name": "@usezend/node",
   "version": "0.1.0",
   "description": "Official Node.js/TypeScript client for the Zend messaging platform",
   "license": "MIT",

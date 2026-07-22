@@ -26,7 +26,7 @@ export class HttpClient {
     const headers: Record<string, string> = {
       'X-API-Key': this.config.apiKey,
       Accept: 'application/json',
-      'User-Agent': `@zend/node/${VERSION}`,
+      'User-Agent': `@usezend/node/${VERSION}`,
       ...this.config.headers,
     };
 

@@ -1,4 +1,4 @@
-# @zend/node
+# @usezend/node
 
 Official Node.js/TypeScript client for the [Zend](https://tryzend.dev) messaging platform. Send SMS, WhatsApp, email, and voice messages — and manage message templates — from a single, typed client.
 
@@ -7,7 +7,7 @@ Official Node.js/TypeScript client for the [Zend](https://tryzend.dev) messaging
 ## Installation
 
 ```bash
-npm i @zend/node
+npm i @usezend/node
 ```
 
 Requires Node.js 18 or later (uses the global `fetch` and `FormData` APIs).
@@ -17,7 +17,7 @@ Requires Node.js 18 or later (uses the global `fetch` and `FormData` APIs).
 Create a client with your API key:
 
 ```ts
-import { Zend } from '@zend/node';
+import { Zend } from '@usezend/node';
 
 const zend = new Zend('sent_live_...');
 ```

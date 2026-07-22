@@ -30,7 +30,7 @@ describe('HttpClient.request', () => {
     expect((init as RequestInit).method).toBe('POST');
     const headers = (init as RequestInit).headers as Record<string, string>;
     expect(headers['X-API-Key']).toBe('sent_live_x');
-    expect(headers['User-Agent']).toMatch(/^@zend\/node\//);
+    expect(headers['User-Agent']).toMatch(/^@usezend\/node\//);
     expect(JSON.parse((init as RequestInit).body as string)).toEqual({
       preferred_channels: ['sms'],
       template_params: { firstName: 'J' },
