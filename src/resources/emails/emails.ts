@@ -6,7 +6,17 @@ export class Emails {
   constructor(private readonly client: HttpClient) {}
 
   send(options: SendEmailOptions) {
-    return this.client.request<Email>('POST', '/email/send', { body: options });
+    const { attachments, ...rest } = options;
+    const body = attachments?.length
+      ? {
+          ...rest,
+          attachments: attachments.map(({ content, ...a }) => ({
+            ...a,
+            content: typeof content === 'string' ? content : Buffer.from(content).toString('base64'),
+          })),
+        }
+      : options;
+    return this.client.request<Email>('POST', '/email/send', { body });
   }
 
   get(id: string) {
