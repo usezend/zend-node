@@ -108,6 +108,20 @@ if (email.error) throw email.error;
 console.log(`Email ${email.data.id} sent`);
 ```
 
+Attach files with `attachments` — `content` is a `Buffer` or base64 string:
+
+```ts
+await zend.emails.send({
+  from: 'you@example.com',
+  to: 'user@gmail.com',
+  subject: 'Your invoice',
+  html: '<p>Invoice attached.</p>',
+  attachments: [{ filename: 'invoice.pdf', content: pdfBuffer, contentType: 'application/pdf' }],
+});
+```
+
+Limits: at most 10 attachments, 7 MB total.
+
 Other `emails` methods: `get(id)`, `list(params?)`.
 
 ## Send Voice
